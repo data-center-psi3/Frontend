@@ -1,0 +1,3 @@
+Fonte: IBGE - API de Malhas Geograficas v3
+URL: https://servicodados.ibge.gov.br/api/v3/malhas/paises/BR?formato=application/vnd.geo+json&intrarregiao=UF&qualidade=minima
+Obtido em 2026-10-16. Qualidade minima para visualizacao nacional; nao usar para analise de precisao.

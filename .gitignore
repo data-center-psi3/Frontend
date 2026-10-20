@@ -1,0 +1,8 @@
+node_modules/
+dist/
+# Ambientes locais e credenciais; mantenha apenas o modelo versionado.
+.env
+.env.*
+!.env.example
+artifacts/
+*.log
