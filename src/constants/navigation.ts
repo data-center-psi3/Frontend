@@ -7,6 +7,7 @@ import {
   BookOpen,
   GraduationCap,
   Cuboid,
+  Newspaper,
 } from "lucide-react";
 import type { NavigationItem } from "../components/layout/Shell";
 export const navigation: NavigationItem[] = [
@@ -44,6 +45,13 @@ export const navigation: NavigationItem[] = [
     icon: Cloud,
     description:
       "A contribuição tecnológica, social e econômica da infraestrutura digital.",
+  },
+  {
+    path: "/noticias",
+    title: "Notícias",
+    icon: Newspaper,
+    description:
+      "Acompanhe as notícias sobre data centers e infraestrutura digital.",
   },
   {
     path: "/por-dentro",

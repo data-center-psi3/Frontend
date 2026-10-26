@@ -1,11 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { useDataCenterDetailsQuery } from "../../queries/dataset";
 import { MapPin, Building2, X, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { SourceReference, EmptyState } from "../common";
 import type { Connection, Dataset } from "../../types/api";
-import { loadDetails, errorMessage } from "../../services/api";
+import { errorMessage } from "../../services/http/errors";
 import { number, displayValue } from "../../utils/data";
 export function DataCenterDetails({
   id,
@@ -22,11 +22,12 @@ export function DataCenterDetails({
   connectionVersion: number;
   onClose: () => void;
 }) {
-  const query = useQuery({
-    queryKey: ["detail", mode, connectionVersion, id],
-    queryFn: ({ signal }) => loadDetails(connection!, id, signal),
-    enabled: mode === "real" && !!connection,
-  });
+  const query = useDataCenterDetailsQuery(
+    connection,
+    id,
+    mode,
+    connectionVersion,
+  );
   const center =
     mode === "demo"
       ? data.centers.find((c) => c.id === id)

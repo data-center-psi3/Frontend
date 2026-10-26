@@ -9,7 +9,7 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import L from "leaflet";
-import { useQuery } from "@tanstack/react-query";
+import { useRadarGeometry } from "../../queries/geometry";
 import type { FeatureCollection, Feature, Geometry } from "geojson";
 import type {
   RadarPoint,
@@ -23,41 +23,11 @@ import {
   radarPalette,
   radarValue,
   validRadarPoint,
-  ufCodes,
 } from "../../utils/radar";
 import { stateName } from "../../utils/geography";
 import { displayValue, number } from "../../utils/data";
 import "leaflet/dist/leaflet.css";
 
-export function useRadarGeometry() {
-  return useQuery({
-    queryKey: ["radar", "ibge-geometry"],
-    staleTime: Infinity,
-    queryFn: async ({ signal }) => {
-      const response = await fetch(
-        `${import.meta.env.BASE_URL}geo/br-states.geojson`,
-        { signal },
-      );
-      if (!response.ok)
-        throw new Error(
-          "Não foi possível carregar os limites estaduais do IBGE.",
-        );
-      const collection = (await response.json()) as FeatureCollection;
-      if (
-        collection.type !== "FeatureCollection" ||
-        !Array.isArray(collection.features) ||
-        collection.features.length !== 27
-      )
-        throw new Error("Malha estadual inválida.");
-      collection.features.forEach((feature) => {
-        const uf = ufCodes[String(feature.properties?.codarea)];
-        if (!uf) throw new Error("UF não identificada na malha.");
-        feature.properties = { ...feature.properties, uf };
-      });
-      return collection;
-    },
-  });
-}
 function Viewport({
   geometry,
   uf,

@@ -141,3 +141,20 @@ Arquivos do redesign: `src/App.tsx`, `src/index.css`, `src/constants/design.ts`,
 A tabela da página do mapa consulta `GET /api/importacoes` e percorre todas as páginas. Exibe as 28 colunas originais do levantamento em snake_case, mapeadas dos nomes camelCase da API. `id` corresponde a `idOriginal`, sem associação presumida com o ID do cadastro normalizado. Valores numéricos e datas brutos permanecem como texto. A tabela possui pesquisa própria, independente dos filtros do mapa, e links seguros para as fontes originais.
 
 Os testes unitários usam respostas simuladas; o smoke test verifica a integração com a API local real. Na verificação desta alteração, o backend retornou 352 cadastros e 348 pontos no mapa, em quatro páginas cada. As contagens dependem da base atual e dos filtros. Cadastros sem latitude e longitude não aparecem no mapa, mas permanecem na lista. Não há alterações de banco, CRUD administrativo, upload/importação ou chamadas de população: esses fluxos não fazem parte das sete páginas educativas solicitadas. Em produção, configure HTTPS e um proxy de servidor equivalente para `/api`. Não é necessário Swagger, JWT ou servidor de autenticação adicional.
+
+## Organização do código
+
+- `src/App.tsx`: declaração das rotas.
+- `src/providers/`: providers globais de router e TanStack Query, montados no `main.jsx`.
+- `src/components/layout/AppLayout.tsx`: shell compartilhado e estados de carregamento das páginas.
+- `src/hooks/useAppData.ts`: filtros compartilhados, exportação e acesso ao dataset.
+- `src/routes/RoutePages.tsx`: carregamento das páginas e passagem dos dados do outlet.
+
+- `src/services/http/`: cliente Axios, paginação e mensagens de erro.
+- `src/services/`: chamadas HTTP por recurso; `dataset.ts` compõe os dados de múltiplos recursos. `api.ts` centraliza somente as rotas dos endpoints.
+- `src/queries/`: configuração do TanStack Query, identificação de conexões, opções reutilizáveis e hooks de consulta (dataset, imports, radar e geometria).
+- `src/adapters/`: transformação e agregação do inventário importado para o contrato do Radar.
+- `src/types/`: contratos compartilhados de dados.
+- `src/pages/` e `src/components/`: estado de interface e apresentação; consultas ficam nos hooks de `queries`.
+
+Para adicionar uma consulta, implemente a chamada no service do recurso e exponha um hook em `queries`. Passe o `AbortSignal` até a requisição e inclua na chave todos os parâmetros que alteram a resposta. Consultas com credenciais diferentes usam identidades de cache distintas, sem expor senhas nas chaves.

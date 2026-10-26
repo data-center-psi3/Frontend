@@ -1,4 +1,5 @@
-import { createApi } from "./api";
+import { apiRoutes } from "./api";
+import { createApi } from "./http/client";
 import type { Connection } from "../types/api";
 import type {
   RadarFilters,
@@ -25,7 +26,7 @@ export function radarService(connection: Connection) {
         ([, value]) => value !== "" && value != null,
       ),
     );
-    const { data } = await client.get<T>(`/radar${path}`, { params, signal });
+    const { data } = await client.get<T>(path, { params, signal });
     if (data == null || typeof data !== "object")
       throw new Error("Resposta incompatível com o contrato do Radar.");
     return data;
@@ -45,22 +46,22 @@ export function radarService(connection: Connection) {
   }
   return {
     overview: (f: RadarFilters, s?: AbortSignal) =>
-      get<RadarOverview>("/overview", f, s),
+      get<RadarOverview>(apiRoutes.radar.overview, f, s),
     states: (f: RadarFilters, metric: RadarMetric, s?: AbortSignal) =>
-      list<RadarState>("/states", f, s, { sortBy: metric }),
+      list<RadarState>(apiRoutes.radar.states, f, s, { sortBy: metric }),
     state: (uf: string, f: RadarFilters, s?: AbortSignal) =>
-      get<RadarStateDetail>(`/states/${encodeURIComponent(uf)}`, f, s),
+      get<RadarStateDetail>(apiRoutes.radar.state(uf), f, s),
     cities: (
       uf: string,
       f: RadarFilters,
       metric: RadarMetric,
       s?: AbortSignal,
     ) =>
-      list<RadarCity>(`/states/${encodeURIComponent(uf)}/cities`, f, s, {
+      list<RadarCity>(apiRoutes.radar.cities(uf), f, s, {
         sortBy: metric === "averageNetworks" ? "networks" : metric,
       }),
     operators: (f: RadarFilters, metric: RadarMetric, s?: AbortSignal) =>
-      list<RadarOperator>("/operators/ranking", f, s, {
+      list<RadarOperator>(apiRoutes.radar.operators, f, s, {
         sortBy: ["networks", "averageNetworks", "ix", "carriers"].includes(
           metric,
         )
@@ -69,12 +70,13 @@ export function radarService(connection: Connection) {
         limit: 10,
       }),
     cityRanking: (f: RadarFilters, metric: RadarMetric, s?: AbortSignal) =>
-      list<RadarCity>("/cities/ranking", f, s, {
+      list<RadarCity>(apiRoutes.radar.cityRanking, f, s, {
         sortBy: metric === "averageNetworks" ? "networks" : metric,
         limit: 1000,
       }),
     points: (f: RadarFilters, s?: AbortSignal) =>
-      list<RadarPoint>("/map", f, s),
-    filters: (s?: AbortSignal) => get<RadarFilterOptions>("/filters", {}, s),
+      list<RadarPoint>(apiRoutes.radar.points, f, s),
+    filters: (s?: AbortSignal) =>
+      get<RadarFilterOptions>(apiRoutes.radar.filters, {}, s),
   };
 }

@@ -3,7 +3,7 @@ import {
   importedCoordinate,
   importedCount,
   importedRadarModel,
-} from "../services/importedRadar";
+} from "../adapters/importedRadar";
 import type { ImportedDataCenter } from "../types/imports";
 const all = { uf: "", region: "", operator: "", installationType: "" };
 const row = (values: Partial<ImportedDataCenter>): ImportedDataCenter => ({

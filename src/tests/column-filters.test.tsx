@@ -3,6 +3,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DataCentersTable } from "../components/DataCentersTable";
+import { importedCentersQueryKey } from "../queries/imports";
 import { importColumns } from "../types/imports";
 
 it("combines column filters, searches displayed missing values and keeps headers available for empty results", async () => {
@@ -14,7 +15,7 @@ it("combines column filters, searches displayed missing values and keeps headers
     Object.values(importColumns).map((key) => [key, null]),
   );
   client.setQueryData(
-    ["imported-centers", "/api"],
+    importedCentersQueryKey({ baseUrl: "/api", username: "", password: "" }),
     [
       {
         ...blank,

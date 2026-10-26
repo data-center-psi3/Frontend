@@ -5,7 +5,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useRadarQueries } from "../../queries/radar";
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -28,9 +28,6 @@ import { RadarGeographicChart } from "../../components/charts/RadarGeographicCha
 import { Bars } from "../../components/charts/IndicatorChart";
 import { MapModeToggle } from "../../components/maps/MapModeToggle";
 import { RadarMap } from "../../components/maps/RadarMap";
-import { importedRadarModel } from "../../services/importedRadar";
-import { radarService } from "../../services/radar";
-import { allPages, createApi, loadImportedCenters } from "../../services/api";
 import { displayValue, normalize, number, safeUrl } from "../../utils/data";
 import { stateKey, stateName } from "../../utils/geography";
 import {
@@ -45,7 +42,7 @@ import {
   validNumber,
   validRadarPoint,
 } from "../../utils/radar";
-import type { Connection, DataCenter } from "../../types/api";
+import type { Connection } from "../../types/api";
 import type {
   RadarFilters,
   RadarMetric,
@@ -121,73 +118,24 @@ export function RadarPage({
         ? "markers"
         : "states";
   const metadata = radarMetrics[metric];
-  const imported = useQuery({
-    queryKey: ["imported-centers", connection.baseUrl],
-    queryFn: ({ signal }) => loadImportedCenters(connection, signal),
-    enabled: useImports,
-  });
-  const importedModel = useMemo(
-    () => importedRadarModel(imported.data ?? []),
-    [imported.data],
-  );
-  const service = useMemo(
-    () => (useImports ? importedModel.service : radarService(connection)),
-    [useImports, importedModel, connection],
-  );
-  const ready = !useImports || imported.isSuccess;
-  const baseKey = [
-    "radar",
-    connection.baseUrl,
-    connection.username,
-    useImports ? `imports:${imported.dataUpdatedAt}` : "api",
-  ];
-  const regionFilters = { ...filters, uf: "" };
-  const overview = useQuery({
-    queryKey: [...baseKey, "overview", filters],
-    queryFn: ({ signal }) => service.overview(filters, signal),
-    enabled: validUf && ready,
-  });
-  const states = useQuery({
-    queryKey: [...baseKey, "states", regionFilters],
-    queryFn: ({ signal }) =>
-      service.states(regionFilters, "installations", signal),
-    enabled: validUf && ready,
-  });
-  const options = useQuery({
-    queryKey: [...baseKey, "filters"],
-    queryFn: ({ signal }) => service.filters(signal),
-    staleTime: 300000,
-    enabled: ready,
-  });
-  const detail = useQuery({
-    queryKey: [...baseKey, "state", filters],
-    queryFn: ({ signal }) => service.state(filters.uf, filters, signal),
-    enabled: validUf && !!filters.uf && ready,
-  });
-  const cities = useQuery({
-    queryKey: [...baseKey, "cities", filters],
-    queryFn: ({ signal }) =>
-      filters.uf
-        ? service.cities(filters.uf, filters, "installations", signal)
-        : service.cityRanking(filters, "installations", signal),
-    enabled: validUf && ready,
-  });
-  const operatorSort = metric === "networks" ? "networks" : "installations";
-  const operators = useQuery({
-    queryKey: [...baseKey, "operators", filters, operatorSort],
-    queryFn: ({ signal }) => service.operators(filters, operatorSort, signal),
-    enabled: validUf && ready,
-  });
-  const points = useQuery({
-    queryKey: [...baseKey, "map", filters],
-    queryFn: ({ signal }) => service.points(filters, signal),
-    enabled: validUf && ready,
-  });
-  const installations = useQuery({
-    queryKey: [...baseKey, "installations"],
-    queryFn: ({ signal }) =>
-      allPages<DataCenter>(createApi(connection), "/data-centers", signal),
-    enabled: validUf && !!filters.uf && !isolatedApi,
+  const {
+    imported,
+    importedModel,
+    overview,
+    states,
+    options,
+    detail,
+    cities,
+    operators,
+    points,
+    installations,
+  } = useRadarQueries({
+    connection,
+    filters,
+    metric,
+    validUf,
+    useImports,
+    isolatedApi,
   });
   const tableQuery = useImports
     ? imported

@@ -7,7 +7,7 @@ import type {
   RadarConnectivity,
   RadarMetric,
 } from "../types/radar";
-import type { radarService } from "./radar";
+import type { radarService } from "../services/radar";
 import { normalize, displayValue, isMissing } from "../utils/data";
 import { stateKey, stateName } from "../utils/geography";
 import {

@@ -174,6 +174,7 @@ export function AppSidebar({
 export function Topbar({
   educational = false,
   radar = false,
+  news = false,
   title,
   connected,
   failed,
@@ -183,6 +184,7 @@ export function Topbar({
 }: {
   educational?: boolean;
   radar?: boolean;
+  news?: boolean;
   title: string;
   connected: boolean;
   failed: boolean;
@@ -207,18 +209,20 @@ export function Topbar({
       </div>
       <div className="header-actions">
         <span
-          className={`connection-badge ${radar ? "" : educational || (connected && !failed) ? "online" : failed ? "offline" : ""}`}
+          className={`connection-badge ${radar || news ? "" : educational || (connected && !failed) ? "online" : failed ? "offline" : ""}`}
         >
           <i />
-          {radar
-            ? "Radar de concentração"
-            : educational
-              ? "Modo educativo"
-              : failed
-                ? "API local indisponível"
-                : connected
-                  ? "API local conectada"
-                  : "Carregando API local…"}
+          {news
+            ? "Feed de notícias"
+            : radar
+              ? "Radar de concentração"
+              : educational
+                ? "Modo educativo"
+                : failed
+                  ? "API local indisponível"
+                  : connected
+                    ? "API local conectada"
+                    : "Carregando API local…"}
         </span>
         <span className="header-divider" />
         <Button

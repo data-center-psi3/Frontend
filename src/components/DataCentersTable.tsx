@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useImportedCentersQuery } from "../queries/imports";
 import { ChevronDown, ExternalLink, Search, X } from "lucide-react";
 import {
   Table,
@@ -13,7 +13,7 @@ import { ColumnValueFilter, type ColumnTerm } from "./ColumnValueFilter";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { EmptyState } from "./common";
-import { errorMessage, loadImportedCenters } from "../services/api";
+import { errorMessage } from "../services/http/errors";
 import { importColumns } from "../types/imports";
 import type { ImportedDataCenter } from "../types/imports";
 import type { Connection } from "../types/api";
@@ -92,11 +92,7 @@ export function DataCentersTable({
   >({});
   const [openColumn, setOpenColumn] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-  const query = useQuery({
-    queryKey: ["imported-centers", connection?.baseUrl],
-    queryFn: ({ signal }) => loadImportedCenters(connection!, signal),
-    enabled: !!connection,
-  });
+  const query = useImportedCentersQuery(connection);
   if (query.isPending && connection)
     return (
       <p role="status" className="text-sm text-muted-foreground">

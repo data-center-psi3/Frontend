@@ -1,10 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
-import {
-  allPages,
-  createApi,
-  errorMessage,
-  loadDataset,
-} from "../services/api";
+import { allPages } from "../services/http/pagination";
+import { createApi } from "../services/http/client";
+import { errorMessage } from "../services/http/errors";
+import { loadDataset } from "../services/dataset";
 import { AxiosError, type AxiosAdapter } from "axios";
 describe("HTTP integration", () => {
   it("normalizes the API prefix and configures Basic auth in memory", () => {
