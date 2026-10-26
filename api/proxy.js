@@ -19,6 +19,9 @@ export default async function handler(req, res) {
   )
     return res.status(400).json({ detail: "Caminho de API inválido." });
   incoming.searchParams.delete("__path");
+  // A Vercel pode incluir o parâmetro da rota dinâmica na query.
+  // Ele identifica a rota no proxy e não é um filtro do backend.
+  incoming.searchParams.delete("path");
   const radar = path === "radar" || path.startsWith("radar/");
   const env = process.env;
   const target = (radar && env.RADAR_API_PROXY_TARGET) || env.API_PROXY_TARGET;

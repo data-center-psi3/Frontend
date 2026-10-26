@@ -21,7 +21,7 @@ test("Vercel proxy preserves queries, selects Radar credentials and handles erro
       return new Response('{"content":[]}', { headers: { "content-type": "application/json" } });
     };
     const map = response();
-    await handler({ method: "GET", url: "/api/proxy?__path=mapa&page=1&sort=id%2Casc" }, map);
+    await handler({ method: "GET", url: "/api/proxy?__path=mapa&path=mapa&page=1&sort=id%2Casc" }, map);
     assert.equal(calls[0].url, "https://primary.example/api/mapa?page=1&sort=id%2Casc");
     assert.equal(calls[0].options.headers.Authorization, `Basic ${Buffer.from("test:test-password").toString("base64")}`);
     assert.equal(map.code, 200);
