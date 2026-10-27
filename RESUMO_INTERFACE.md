@@ -17,7 +17,7 @@ Mostra a localização das instalações em um mapa interativo. Permite explorar
 Permite escolher duas ou mais instalações e os indicadores desejados. Os resultados aparecem em gráficos e em uma tabela com referências, agrupando medidas de mesma unidade e período para facilitar a comparação.
 
 ## 5. Benefícios
-Apresenta os benefícios tecnológicos, sociais e econômicos da infraestrutura digital. Os registros disponíveis aparecem em cartões com categoria, descrição e fontes, com opção de filtragem por tipo.
+Apresenta os registros em duas tabelas compactas: benefícios à esquerda, em verde, e malefícios à direita, em vermelho. Cada linha reúne categoria, descrição, instalação e fonte, com filtro por categoria. No celular, as tabelas ficam uma abaixo da outra.
 
 ## 6. Notícias
 Reúne notícias sobre tecnologia, infraestrutura digital e sustentabilidade. Apresenta cartões de matérias, busca por assunto, título ou fonte, filtros por categoria e botões para atualizar o feed ou carregar mais notícias.
@@ -25,10 +25,13 @@ Reúne notícias sobre tecnologia, infraestrutura digital e sustentabilidade. Ap
 ## 7. Aprenda e simule
 Possui duas áreas: uma para explorar a estrutura de um data center, como servidores, refrigeração, energia, redes e segurança; outra para simular cenários de energia e água a partir dos valores escolhidos pelo usuário. As simulações são hipotéticas.
 
-## 8. Fontes e metodologia
+## 8. Assistente
+Chat para tirar dúvidas sobre data centers e sustentabilidade. Apresenta sugestões de perguntas, histórico durante a visita, indicador de resposta em andamento e opção de iniciar uma nova conversa. Envia a pergunta ao agente do backend e exibe a resposta recebida.
+
+## 9. Fontes e metodologia
 Lista as referências utilizadas, com pesquisa, filtro por instituição e links para as publicações originais. Também explica como interpretar os dados e quais são os limites das análises.
 
-## 9. Sobre o projeto
+## 10. Sobre o projeto
 Apresenta o contexto acadêmico da iniciativa do IFSP — Campus Hortolândia, seus objetivos, justificativa, público-alvo e metodologia. Também reúne os conteúdos de pesquisa cadastrados.
 
 ## Tela adicional: Radar de Concentração

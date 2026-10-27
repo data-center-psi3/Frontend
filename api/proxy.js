@@ -1,7 +1,7 @@
 // Executado somente no servidor da Vercel; credenciais não entram no bundle.
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
-  if (!["GET", "HEAD"].includes(req.method)) {
+  if (!["GET", "HEAD", "POST"].includes(req.method)) {
     res.setHeader("Allow", "GET, HEAD");
     return res
       .status(405)
@@ -22,6 +22,31 @@ export default async function handler(req, res) {
   // A Vercel pode incluir o parâmetro da rota dinâmica na query.
   // Ele identifica a rota no proxy e não é um filtro do backend.
   incoming.searchParams.delete("path");
+  const isChat = path === "agent/chat";
+  if (req.method === "POST" && !isChat) {
+    res.setHeader("Allow", "GET, HEAD");
+    return res
+      .status(405)
+      .json({ detail: "POST disponível somente para o chat." });
+  }
+  let requestBody;
+  if (req.method === "POST") {
+    try {
+      const body =
+        typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+      if (
+        typeof body?.message !== "string" ||
+        !body.message.trim() ||
+        body.message.length > 8000
+      )
+        throw new Error("INVALID_MESSAGE");
+      requestBody = JSON.stringify({ message: body.message.trim() });
+    } catch {
+      return res
+        .status(400)
+        .json({ detail: "Envie uma mensagem de 1 a 8000 caracteres." });
+    }
+  }
   const radar = path === "radar" || path.startsWith("radar/");
   const env = process.env;
   const target = (radar && env.RADAR_API_PROXY_TARGET) || env.API_PROXY_TARGET;
@@ -46,12 +71,10 @@ export default async function handler(req, res) {
     upstream.search = incoming.searchParams.toString();
   } catch {
     console.error("[API proxy] Configuração ausente ou inválida na Vercel.");
-    return res
-      .status(500)
-      .json({
-        detail:
-          "Configure o destino HTTPS e as credenciais da API nas variáveis de ambiente da Vercel.",
-      });
+    return res.status(500).json({
+      detail:
+        "Configure o destino HTTPS e as credenciais da API nas variáveis de ambiente da Vercel.",
+    });
   }
 
   try {
@@ -60,18 +83,18 @@ export default async function handler(req, res) {
       headers: {
         Accept: "application/json, application/problem+json",
         Authorization: `Basic ${Buffer.from(`${username}:${password}`).toString("base64")}`,
+        ...(requestBody ? { "Content-Type": "application/json" } : {}),
       },
+      ...(requestBody ? { body: requestBody } : {}),
       redirect: "manual",
       signal: AbortSignal.timeout(55000),
     });
     if (response.status >= 300 && response.status < 400) {
       await response.body?.cancel();
-      return res
-        .status(502)
-        .json({
-          detail:
-            "A API redirecionou a requisição. Confira o destino configurado.",
-        });
+      return res.status(502).json({
+        detail:
+          "A API redirecionou a requisição. Confira o destino configurado.",
+      });
     }
     const body = Buffer.from(await response.arrayBuffer());
     const contentType = response.headers.get("content-type");
@@ -88,12 +111,10 @@ export default async function handler(req, res) {
     console.error(
       `[API proxy] ${timeout ? "TIMEOUT" : error.cause?.code || "CONNECTION_ERROR"}`,
     );
-    return res
-      .status(timeout ? 504 : 502)
-      .json({
-        detail: timeout
-          ? "A API demorou para responder."
-          : "Não foi possível conectar ao backend.",
-      });
+    return res.status(timeout ? 504 : 502).json({
+      detail: timeout
+        ? "A API demorou para responder."
+        : "Não foi possível conectar ao backend.",
+    });
   }
 }

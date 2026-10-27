@@ -33,6 +33,12 @@ const About = lazy(() =>
 const Learning = lazy(() =>
   import("../pages/Learning").then((m) => ({ default: m.Learning })),
 );
+const Agent = lazy(() =>
+  import("../pages/Agent").then((m) => ({ default: m.Agent })),
+);
+export function AgentRoute() {
+  return <Agent />;
+}
 export function DashboardRoute() {
   const props = useOutletContext<AppOutletContext>();
   return <Dashboard {...props} />;

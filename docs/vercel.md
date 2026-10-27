@@ -1,6 +1,6 @@
 # Deploy na Vercel
 
-O proxy de `vite.config.js` funciona apenas em desenvolvimento e preview local. Na Vercel, `vercel.json` encaminha `/api/*` para a função `api/proxy.js`, que adiciona Basic Auth no servidor. Ela aceita somente GET e HEAD, preserva os parâmetros de consulta e não armazena as respostas em cache.
+O proxy de `vite.config.js` funciona apenas em desenvolvimento e preview local. Na Vercel, `vercel.json` encaminha `/api/*` para a função `api/proxy.js`, que adiciona Basic Auth no servidor. Ela aceita GET e HEAD e permite POST exclusivamente em `/api/agent/chat`, preserva os parâmetros de consulta e não armazena as respostas em cache.
 
 1. Configure a **Root Directory** da Vercel para esta pasta frontend, onde estão `package.json`, `vercel.json` e `api/`. Não publique apenas a pasta `dist`.
 2. Em **Settings → Environment Variables**, cadastre para Production (e Preview, se utilizado):

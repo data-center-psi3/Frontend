@@ -12,6 +12,7 @@ import {
   AboutRoute,
   LearningRoute,
   NewsRoute,
+  AgentRoute,
 } from "./routes/RoutePages";
 
 export default function App() {
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="comparacao" element={<ComparisonRoute />} />
         <Route path="beneficios" element={<BenefitsRoute />} />
         <Route path="noticias" element={<NewsRoute />} />
+        <Route path="assistente" element={<AgentRoute />} />
         <Route path="fontes" element={<SourcesRoute />} />
         <Route path="sobre" element={<AboutRoute />} />
         <Route path="por-dentro" element={<LearningRoute />} />

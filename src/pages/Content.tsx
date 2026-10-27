@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
 import {
   Cloud,
-  Cpu,
   Database,
   GraduationCap,
   Scale,
   Search,
   ShieldCheck,
 } from "lucide-react";
-import { Card } from "../components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../components/ui/table";
+import "./benefits.css";
 import { BrandMark } from "../components/ui/brand-mark";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
@@ -27,9 +34,24 @@ export function Benefits({ data, centers }: ViewProps) {
     centers.some((c) => c.id === b.dataCenterId),
   );
   const filtered = records.filter((b) => !type || b.tipo === type);
-  const icons = [Cloud, Cpu, Database];
+  const isNegative = (tipo: string) =>
+    /\b(maleficio\w*|desvantage\w*|risco\w*|impactos? negativos?|efeitos? negativos?)\b/.test(
+      normalize(tipo),
+    );
+  const groups = [
+    {
+      title: "Benefícios",
+      tone: "positive",
+      items: filtered.filter((b) => !isNegative(b.tipo)),
+    },
+    {
+      title: "Malefícios",
+      tone: "negative",
+      items: filtered.filter((b) => isNegative(b.tipo)),
+    },
+  ];
   return (
-    <>
+    <section className="benefits-page">
       <div className="education-hero">
         <div>
           <span className="eyebrow">TECNOLOGIA QUE CONECTA</span>
@@ -43,7 +65,7 @@ export function Benefits({ data, centers }: ViewProps) {
       </div>
       <div className="inline-filters">
         <FilterSelect
-          label="Categoria de benefício"
+          label="Categoria"
           value={type}
           onChange={setType}
           options={[...new Set(records.map((b) => b.tipo))].map((value) => ({
@@ -52,40 +74,62 @@ export function Benefits({ data, centers }: ViewProps) {
           }))}
         />
       </div>
-      <div className="content-grid">
-        {filtered.map((b, i) => {
-          const Icon = icons[i % icons.length];
-          return (
-            <Card key={b.id} className="benefit-card">
-              <div className="icon-box green large">
-                <Icon size={25} />
-              </div>
-              <h3>{displayValue(b.tipo)}</h3>
-              <p>{displayValue(b.descricao)}</p>
-              <small>
-                {displayValue(
-                  centers.find((c) => c.id === b.dataCenterId)?.nome,
-                )}
-              </small>
-              <SourceReference
-                source={data.sources.find((s) => s.id === b.fonteId)}
-              />
-            </Card>
-          );
-        })}
+      <div className="benefits-tables">
+        {groups.map(({ title, tone, items }) => (
+          <section
+            key={tone}
+            className={`benefits-column benefits-${tone}`}
+            aria-label={title}
+          >
+            <h3>
+              {title}
+              <span>{items.length}</span>
+            </h3>
+            <div className="benefits-table-scroll">
+              <Table aria-label={`Tabela de ${title.toLowerCase()}`}>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead scope="col">Descrição</TableHead>
+                    <TableHead scope="col">Instalação e fonte</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {items.map((b) => (
+                    <TableRow key={b.id} className="benefits-row">
+                      <TableCell>
+                        <p>{displayValue(b.descricao)}</p>
+                      </TableCell>
+                      <TableCell>
+                        <span>
+                          {displayValue(
+                            centers.find((c) => c.id === b.dataCenterId)?.nome,
+                          )}
+                        </span>
+                        <SourceReference
+                          source={data.sources.find((s) => s.id === b.fonteId)}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {!items.length && (
+                    <TableRow>
+                      <TableCell colSpan={2} className="benefits-empty">
+                        Nenhum registro de {title.toLowerCase()} nesta seleção.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          </section>
+        ))}
       </div>
-      {!filtered.length && (
-        <EmptyState
-          title="Benefícios ainda não cadastrados"
-          description="A carga do CSV não cria benefícios automaticamente. Esta seção apresenta somente registros disponíveis na API."
-        />
-      )}
       <div className="educational-note">
         Benefícios tecnológicos e econômicos não anulam impactos ambientais. Os
         dados devem ser interpretados em conjunto, com atenção às fontes e ao
         contexto local.
       </div>
-    </>
+    </section>
   );
 }
 export function Sources({ data }: ViewProps) {

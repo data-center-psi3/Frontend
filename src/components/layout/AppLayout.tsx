@@ -12,6 +12,7 @@ import type { AppOutletContext } from "../../types/routes";
 export function AppLayout() {
   const location = useLocation();
   const isNews = location.pathname === "/noticias";
+  const isAgent = location.pathname === "/assistente";
   const isLearning = location.pathname === "/por-dentro";
   const isRadar =
     location.pathname.startsWith("/radar") ||
@@ -55,7 +56,12 @@ export function AppLayout() {
     setFilters,
     exportData,
     ensureLocations,
-  } = useAppData(isLearning, isRadar, location.pathname, location.search);
+  } = useAppData(
+    isLearning || isAgent,
+    isRadar,
+    location.pathname,
+    location.search,
+  );
   const ready = !!query.data;
   return (
     <>
@@ -88,7 +94,7 @@ export function AppLayout() {
         />
         <div className="workspace">
           <Topbar
-            educational={isLearning}
+            educational={isLearning || isAgent}
             radar={isRadar}
             news={isNews}
             title={page.title}
@@ -99,7 +105,7 @@ export function AppLayout() {
             onMenu={() => setSidebarOpen(true)}
           />
           <main id="main-content" className="main-content" tabIndex={-1}>
-            {!isNews && !isLearning && !isRadar && (
+            {!isNews && !isLearning && !isRadar && !isAgent && (
               <PageHeader
                 title={page.title}
                 description={page.description}
@@ -111,9 +117,13 @@ export function AppLayout() {
             )}
             {ready &&
               !isRadar &&
-              !["/fontes", "/sobre", "/por-dentro", "/noticias"].includes(
-                location.pathname,
-              ) && (
+              ![
+                "/fontes",
+                "/sobre",
+                "/por-dentro",
+                "/noticias",
+                "/assistente",
+              ].includes(location.pathname) && (
                 <FilterPanel
                   data={data}
                   filters={filters}
@@ -122,10 +132,15 @@ export function AppLayout() {
               )}
             <div className="page-content">
               <Suspense fallback={<LoadingState />}>
-                {!isNews && !isLearning && !isRadar && query.isPending ? (
+                {!isNews &&
+                !isLearning &&
+                !isRadar &&
+                !isAgent &&
+                query.isPending ? (
                   <LoadingState />
                 ) : !isNews &&
                   !isLearning &&
+                  !isAgent &&
                   !isRadar &&
                   query.isError &&
                   !query.data ? (

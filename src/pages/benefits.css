@@ -1,0 +1,124 @@
+.benefits-page .education-hero {
+  padding: 18px 22px;
+  min-height: auto;
+  margin-bottom: 16px;
+}
+.benefits-page .education-hero h2 {
+  font-size: 22px;
+}
+.benefits-page .education-hero p {
+  font-size: 13px;
+  margin-top: 8px;
+}
+.benefits-page .education-hero > svg {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+}
+.benefits-page .inline-filters {
+  margin-bottom: 16px;
+}
+.benefits-tables {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.benefits-column {
+  min-width: 0;
+}
+.benefits-column > h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  border-bottom: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  background: hsl(var(--card));
+}
+.benefits-column > h3::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--impact-color);
+}
+.benefits-column > h3 span {
+  font-size: 11px;
+  font-weight: 500;
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 6px;
+  color: var(--impact-color);
+  background: var(--impact-surface);
+}
+.benefits-positive {
+  --impact-color: #047857;
+  --impact-surface: #ecfdf5;
+}
+.benefits-negative {
+  --impact-color: #b91c1c;
+  --impact-surface: #fef2f2;
+}
+.dark .benefits-positive {
+  --impact-color: #6ee7b7;
+  --impact-surface: #052e25;
+}
+.dark .benefits-negative {
+  --impact-color: #fca5a5;
+  --impact-surface: #391718;
+}
+.benefits-table-scroll {
+  overflow-x: auto;
+}
+.benefits-column table {
+  table-layout: fixed;
+}
+.benefits-column th {
+  padding: 10px 12px;
+  height: auto;
+  font-size: 11px;
+  background: hsl(var(--muted) / 0.5);
+}
+.benefits-column th:first-child {
+  width: 62%;
+}
+.benefits-column td {
+  padding: 12px;
+  vertical-align: top;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+.benefits-row > td:first-child {
+  box-shadow: inset 2px 0 0 var(--impact-color);
+}
+.benefits-column td p {
+  margin: 0;
+}
+.benefits-column td > span {
+  display: block;
+  margin-bottom: 6px;
+}
+.benefits-empty {
+  color: hsl(var(--muted-foreground));
+}
+.benefits-page .educational-note {
+  margin-top: 16px;
+  font-size: 12px;
+}
+@media (max-width: 767px) {
+  .benefits-tables {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .benefits-page .education-hero {
+    padding: 16px;
+  }
+  .benefits-page .education-hero h2 {
+    font-size: 19px;
+  }
+}

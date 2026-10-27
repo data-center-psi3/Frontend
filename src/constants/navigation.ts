@@ -8,6 +8,7 @@ import {
   GraduationCap,
   Cuboid,
   Newspaper,
+  Bot,
 } from "lucide-react";
 import type { NavigationItem } from "../components/layout/Shell";
 export const navigation: NavigationItem[] = [
@@ -59,6 +60,12 @@ export const navigation: NavigationItem[] = [
     icon: Cuboid,
     description:
       "Conheça os sistemas de um data center e explore cenários hipotéticos de energia e água.",
+  },
+  {
+    path: "/assistente",
+    title: "Assistente",
+    icon: Bot,
+    description: "Converse sobre data centers, tecnologia e sustentabilidade.",
   },
   {
     path: "/fontes",
