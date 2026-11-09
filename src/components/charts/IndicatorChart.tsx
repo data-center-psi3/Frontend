@@ -22,14 +22,7 @@ import {
 } from "react";
 import { EmptyState } from "../common";
 import { number, displayValue, isMissing } from "../../utils/data";
-const colors = [
-  "#d97706",
-  "#2563eb",
-  "#7c3aed",
-  "#ea580c",
-  "#059669",
-  "#64748b",
-];
+import { chartPalette as colors } from "./chartTheme";
 const motionQuery = "(prefers-reduced-motion: reduce)";
 const subscribeMotion = (listener: () => void) => {
   if (!window.matchMedia) return () => {};

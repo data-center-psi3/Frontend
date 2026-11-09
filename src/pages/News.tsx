@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Newspaper, RefreshCw, Search } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import { EmptyState, ErrorState, LoadingState } from "../components/common";
-import { NewsCard } from "../components/news/NewsCard";
+import { EmptyState, ErrorState } from "../components/common";
+import { NewsCard, NewsCardSkeleton } from "../components/news/NewsCard";
 import { useNewsQuery } from "../queries/news";
 import { errorMessage } from "../services/http/errors";
 import { normalize } from "../utils/data";
@@ -74,7 +74,12 @@ export function News({ connection }: { connection: Connection }) {
           {filtered.length} {filtered.length === 1 ? "notícia" : "notícias"}
         </span>
       </div>
-      {!!categories.length && (
+      {query.isPending ? (
+        <div className="news-categories news-categories-skeleton" aria-hidden="true">
+          <span className="skeleton" />
+          <span className="skeleton" />
+        </div>
+      ) : !!categories.length && (
         <div
           className="news-categories"
           role="group"
@@ -96,7 +101,14 @@ export function News({ connection }: { connection: Connection }) {
         </div>
       )}
       {query.isPending ? (
-        <LoadingState />
+        <div className="news-feed" role="status" aria-label="Carregando notícias">
+          {Array.from({ length: 7 }, (_, index) => (
+            <NewsCardSkeleton
+              key={index}
+              featured={index === 0 && !category && !search.trim()}
+            />
+          ))}
+        </div>
       ) : query.isError && !query.data ? (
         <ErrorState
           message={errorMessage(query.error)}

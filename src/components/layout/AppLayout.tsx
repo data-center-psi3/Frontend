@@ -8,11 +8,11 @@ import { ErrorState, LoadingState } from "../common";
 import { errorMessage } from "../../services/http/errors";
 import { useAppData } from "../../hooks/useAppData";
 import type { AppOutletContext } from "../../types/routes";
+import { AgentWidget } from "./AgentWidget";
 
 export function AppLayout() {
   const location = useLocation();
   const isNews = location.pathname === "/noticias";
-  const isAgent = location.pathname === "/assistente";
   const isLearning = location.pathname === "/por-dentro";
   const isRadar =
     location.pathname.startsWith("/radar") ||
@@ -57,7 +57,7 @@ export function AppLayout() {
     exportData,
     ensureLocations,
   } = useAppData(
-    isLearning || isAgent,
+    isLearning,
     isRadar,
     location.pathname,
     location.search,
@@ -94,7 +94,7 @@ export function AppLayout() {
         />
         <div className="workspace">
           <Topbar
-            educational={isLearning || isAgent}
+            educational={isLearning}
             radar={isRadar}
             news={isNews}
             title={page.title}
@@ -104,8 +104,12 @@ export function AppLayout() {
             onTheme={() => setTheme(theme === "light" ? "dark" : "light")}
             onMenu={() => setSidebarOpen(true)}
           />
-          <main id="main-content" className="main-content" tabIndex={-1}>
-            {!isNews && !isLearning && !isRadar && !isAgent && (
+          <main
+            id="main-content"
+            className={`main-content${isNews ? " news-main-content" : ""}`}
+            tabIndex={-1}
+          >
+            {!isNews && !isLearning && !isRadar && (
               <PageHeader
                 title={page.title}
                 description={page.description}
@@ -122,7 +126,6 @@ export function AppLayout() {
                 "/sobre",
                 "/por-dentro",
                 "/noticias",
-                "/assistente",
               ].includes(location.pathname) && (
                 <FilterPanel
                   data={data}
@@ -135,12 +138,10 @@ export function AppLayout() {
                 {!isNews &&
                 !isLearning &&
                 !isRadar &&
-                !isAgent &&
                 query.isPending ? (
                   <LoadingState />
                 ) : !isNews &&
                   !isLearning &&
-                  !isAgent &&
                   !isRadar &&
                   query.isError &&
                   !query.data ? (
@@ -179,6 +180,7 @@ export function AppLayout() {
           </main>
         </div>
       </div>
+      <AgentWidget />
     </>
   );
 }

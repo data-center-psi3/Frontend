@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./components/layout/AppLayout";
 import { NotFound } from "./pages/NotFound";
 import {
@@ -12,7 +12,6 @@ import {
   AboutRoute,
   LearningRoute,
   NewsRoute,
-  AgentRoute,
 } from "./routes/RoutePages";
 
 export default function App() {
@@ -28,7 +27,7 @@ export default function App() {
         <Route path="comparacao" element={<ComparisonRoute />} />
         <Route path="beneficios" element={<BenefitsRoute />} />
         <Route path="noticias" element={<NewsRoute />} />
-        <Route path="assistente" element={<AgentRoute />} />
+        <Route path="assistente" element={<Navigate to="/" replace />} />
         <Route path="fontes" element={<SourcesRoute />} />
         <Route path="sobre" element={<AboutRoute />} />
         <Route path="por-dentro" element={<LearningRoute />} />

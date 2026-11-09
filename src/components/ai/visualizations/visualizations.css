@@ -1,0 +1,31 @@
+.ai-visualization { min-width: 0; padding: 14px; border: 1px solid hsl(var(--border)); border-radius: 12px; background: hsl(var(--card)); }
+.agent-message-assistant:has(.ai-visualization), .agent-message-assistant:has(.ai-visualization) > div { width: 100%; }
+.ai-viz-heading h3 { font-size: 14px; font-weight: 600; }
+.ai-viz-heading p, .ai-axis-caption { margin-top: 4px; font-size: 11px; color: hsl(var(--muted-foreground)); }
+.ai-viz-toolbar { display: flex; flex-wrap: wrap; gap: 5px; margin: 12px 0; }
+.ai-visualization button, .ai-viz-dialog button { display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 6px 8px; border: 1px solid hsl(var(--border)); border-radius: 6px; font-size: 11px; background: hsl(var(--card)); color: hsl(var(--foreground)); }
+.ai-visualization button:hover, .ai-viz-dialog button:hover { background: hsl(var(--muted)); }
+.ai-visualization button:disabled, .ai-viz-dialog button:disabled { opacity: 0.4; cursor: default; }
+.ai-visualization :focus-visible, .ai-viz-dialog :focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+.ai-chart-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.ai-table input, .ai-chart-filters input, .ai-chart-filters select { min-width: 0; max-width: 100%; padding: 8px 10px; border: 1px solid hsl(var(--border)); border-radius: 7px; font-size: 12px; background: hsl(var(--card)); color: hsl(var(--foreground)); }
+.ai-table input { width: 100%; margin-bottom: 10px; }
+.ai-chart-filters input { flex: 1; width: 120px; }
+.ai-chart-scroll { width: 100%; max-height: 430px; overflow: auto; scrollbar-width: thin; }
+.ai-pagination { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.ai-pagination > span { flex: 1; font-size: 11px; color: hsl(var(--muted-foreground)); }
+.ai-table th button { border: 0; background: transparent; padding: 0; font-weight: 600; font-size: 12px; text-align: left; justify-content: flex-start; }
+.ai-viz-footnote { display: grid; gap: 3px; margin-top: 10px; font-size: 10px; color: hsl(var(--muted-foreground)); }
+.ai-viz-notice, .ai-viz-error { padding: 8px; border-radius: 7px; background: hsl(var(--muted)); font-size: 12px; margin-bottom: 10px; }
+.ai-viz-error { color: hsl(var(--destructive)); }
+.ai-load-more { margin-top: 10px; }
+.ai-chart .ai-pie-legend { display: grid; gap: 0; padding: 0; margin: 8px 0; max-height: 190px; overflow-y: auto; list-style: none; scrollbar-width: thin; }
+.ai-pie-legend li { display: flex; align-items: center; gap: 8px; padding: 7px 4px; border-bottom: 1px solid hsl(var(--border)); font-size: 11px; }
+.ai-pie-legend i { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ai-pie-legend li > span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.ai-pie-legend strong { font-weight: 550; font-variant-numeric: tabular-nums; }
+.ai-viz-overlay { position: fixed; inset: 0; z-index: 1300; background: rgb(0 0 0 / 0.6); }
+.ai-viz-dialog { position: fixed; z-index: 1301; top: 50%; left: 50%; transform: translate(-50%, -50%); width: min(1100px, calc(100vw - 24px)); max-height: calc(100dvh - 32px); overflow: auto; padding: 24px; border-radius: 16px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)); color: hsl(var(--foreground)); }
+.ai-viz-close { position: absolute; right: 10px; top: 10px; }
+.ai-viz-dialog .ai-viz-heading { padding-right: 30px; }
+@media (max-width: 480px) { .ai-visualization { padding: 10px; } .ai-viz-dialog { padding: 16px; } .ai-pagination > span { flex-basis: 100%; } }

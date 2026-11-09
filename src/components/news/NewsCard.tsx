@@ -3,6 +3,36 @@ import { ArrowUpRight, CalendarDays, Newspaper } from "lucide-react";
 import type { News } from "../../types/news";
 import { safeUrl } from "../../utils/data";
 
+export function NewsCardSkeleton({ featured = false }: { featured?: boolean }) {
+  return (
+    <div
+      className={`news-card news-card-skeleton ${featured ? "news-card-featured" : ""}`}
+      aria-hidden="true"
+    >
+      <div className="news-card-image skeleton" />
+      <div className="news-card-body">
+        <div className="news-card-meta">
+          <span className="skeleton w-2/5 h-4" />
+          <span className="skeleton w-1/4 h-4" />
+        </div>
+        <h2>
+          <span className="skeleton news-skeleton-line" />
+          <span className="skeleton news-skeleton-line w-4/5" />
+        </h2>
+        <div className="news-card-description">
+          <span className="skeleton news-skeleton-line" />
+          <span className="skeleton news-skeleton-line" />
+          <span className="skeleton news-skeleton-line w-3/5" />
+        </div>
+        <div className="news-card-footer">
+          <span className="skeleton w-2/5 h-3" />
+          <span className="skeleton w-1/4 h-3" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function NewsCard({
   article,
   featured = false,

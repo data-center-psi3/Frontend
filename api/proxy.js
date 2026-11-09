@@ -40,7 +40,17 @@ export default async function handler(req, res) {
         body.message.length > 8000
       )
         throw new Error("INVALID_MESSAGE");
-      requestBody = JSON.stringify({ message: body.message.trim() });
+      if (
+        body.conversationId !== undefined &&
+        (typeof body.conversationId !== "string" ||
+          !body.conversationId.trim() ||
+          body.conversationId.length > 200)
+      )
+        return res.status(400).json({ detail: "conversationId inválido." });
+      requestBody = JSON.stringify({
+        message: body.message.trim(),
+        ...(body.conversationId ? { conversationId: body.conversationId } : {}),
+      });
     } catch {
       return res
         .status(400)
